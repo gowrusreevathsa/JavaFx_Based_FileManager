@@ -77,6 +77,10 @@ public class MainController {
 	Stage stage = new Stage();
 	int selectedIndex;
 	
+	/*
+	 * Method to select single file.
+	 * Loads the file into listview.
+	 */
 	public void singleAction(ActionEvent event){
 		FileChooser fileChooser = new FileChooser();
 		selected = fileChooser.showOpenDialog(null);
@@ -91,6 +95,10 @@ public class MainController {
 		}
 	}
 	
+	/*
+	 * Method to select multiple files.
+	 * Loads selected files into listview.
+	 */
 	public void multiAction(ActionEvent event){
 		FileChooser fileChooser = new FileChooser();
 		selectedFiles = fileChooser.showOpenMultipleDialog(null);
@@ -107,6 +115,9 @@ public class MainController {
 		}
 	}
 	
+	/*
+	 * Method to define mouse click events on Listview
+	 */
 	public void onListView(MouseEvent mouseEvent){		
 		listview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		selectedIndex = listview.getSelectionModel().getSelectedIndex();
@@ -146,6 +157,10 @@ public class MainController {
 		
 	}
 	
+	/*
+	 * Method to check if either CTRL or SHIFT is held.
+	 * Flags specified variables to check which button is pressed.
+	 */
 	public void onListViewKey(KeyEvent k){
 		if(k.getCode().equals(KeyCode.SHIFT)){
 			shiftFlag = 1;
@@ -159,11 +174,18 @@ public class MainController {
 		}
 	}
 	
+	/*
+	 * Method to reset CTRL and SHIFT flags after releasing the held key.
+	 */
 	public void onListViewKey2(KeyEvent k){
 		shiftFlag = 0;
 		ctrlFlag = 0;
 	}
 	
+	/*
+	 * Method to define operations if Delete button is clicked.
+	 * Deletes the selected file(s) permanently.
+	 */
 	public void onDeleteBtn(MouseEvent mouseEvent){
 		
 		
@@ -208,15 +230,23 @@ public class MainController {
 		}
 	}
 	
-	
+	/*
+	 * Method to define operations if Open button is selected.
+	 * Opens the selected file(s) in a default application.
+	 */
 	public void onOpen(ActionEvent event){
 		
 		if(selectedItems.size() != 0){
-			File file = new File(selectedItemsPath.get(0));
-			try {
-				Desktop.getDesktop().open(file);
-			} catch (IOException e) {
-				e.printStackTrace();
+			File file;
+			int a = 0;
+			for(int i: selectedItems){
+				file = new File(selectedItemsPath.get(a));
+				try {
+					Desktop.getDesktop().open(file);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				a++;
 			}
 		}
 		else{
@@ -229,19 +259,10 @@ public class MainController {
 		}
 	}
 	
-	public void onNewFolder(MouseEvent event){
-		
-		try{
-			
-			onNameSelect();
-			
-		}catch (Exception e) {
-			
-		}
-		
-		
-	}
-	
+	/*
+	 * After name is typed while creating new folder.
+	 * Allows user to choose the path of the new folder and creates the folder at specified location.
+	 */
 	public void onOk(MouseEvent event){
 		name = textfield.getText().toString();
 
@@ -263,7 +284,11 @@ public class MainController {
 		}
 	}
 	
-	public void onNameSelect(){
+	/*
+	 * Method to define operations when new folder button is clicked.
+	 * Calls a new FXML window
+	 */
+	public void onNewFolder(){
 		Parent root = null;
 		try {
 			root = FXMLLoader.load(Main.class.getResource("/application/FolderName.fxml"));
@@ -278,6 +303,10 @@ public class MainController {
 		stage.show();
 	}
 	
+	/*
+	 * Method to select all files a folder.
+	 * Loads all files of the folder into the listview.
+	 */
 	public void onSelectFiles(MouseEvent event){
 		
 		DirectoryChooser chooser = new DirectoryChooser();
@@ -293,11 +322,19 @@ public class MainController {
 		
 	}
 	
+	/*
+	 * Method to define close button.
+	 * Exits the application.
+	 */
 	public void onBtnClose(MouseEvent event){
 		stage = (Stage) btn_close.getScene().getWindow();
 		stage.close();
 	}
 	
+	/*
+	 * To type path in specified text field and open any folder.
+	 * Opens the file or folder as specified by the entered path.
+	 */
 	public void onKey(KeyEvent k){
 		if(k.getCode().equals(KeyCode.ENTER)){
 			if(pathText.getText().length() == 0){
@@ -315,10 +352,18 @@ public class MainController {
 		}
 	}
 	
+	/*
+	 * On clicking close menu item.
+	 * Closes the application.
+	 */
 	public void onMenuClose(ActionEvent event){
 		onBtnClose(null);
 	}
 	
+	/*
+	 * On clicking New text file menu item.
+	 * Opens notepad.
+	 */
 	public void onMenuNew(ActionEvent event){
 		Runtime runtime = Runtime.getRuntime();
 		try {
@@ -328,11 +373,10 @@ public class MainController {
 		}
 	}
 	
-	public void onMenuOpen(ActionEvent event){
-		FileChooser fileChooser = new FileChooser();
-		
-	}
-	
+	/*
+	 * On clicking clear list menu item.
+	 * Clears listview
+	 */
 	public void onMenuClear(ActionEvent event){
 		listview.getItems().clear();
 		toDelete.clear();
@@ -344,7 +388,10 @@ public class MainController {
 		
 	}
 	
-	
+	/*
+	 * On clicking clear list menu item.
+	 * Clears selected items from the listview
+	 */
 	public void onMenuClearSelected(ActionEvent event){
 		if(listview.getItems().size() != 0){
 			for(int i: selectedItems){				
@@ -369,6 +416,10 @@ public class MainController {
 		
 	}
 	
+	/*
+	 * On clicking move button.
+	 * Moves file(s) to any selected folder.
+	 */
 	public void onMove(MouseEvent event){
 		
 		if(selectedItems.size() == 0){
